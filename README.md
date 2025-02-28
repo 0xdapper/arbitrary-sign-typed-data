@@ -1,6 +1,7 @@
 # Sign Typed Data Debug Tool
 
-> [!CAUTION] > **NEVER SIGN TYPED DATA WITHOUT CAREFULLY READING AND UNDERSTANDING THE CONTENT FIRST**
+> [!CAUTION]
+> **NEVER SIGN TYPED DATA WITHOUT CAREFULLY READING AND UNDERSTANDING THE CONTENT FIRST**
 > Signing messages without verification can lead to loss of funds or unauthorized access to your assets. Always thoroughly review the typed data structure and content before signing.
 
 A minimal utility dapp for testing and debugging EIP-712 typed structured data signing. Allows developers to quickly test typed data signatures by pasting JSON messages and signing them with a connected wallet.
