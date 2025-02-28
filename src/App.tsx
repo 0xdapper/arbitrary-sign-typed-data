@@ -1,5 +1,6 @@
 import { useAccount, useConnect, useDisconnect, useSignTypedData } from "wagmi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
   const account = useAccount();
@@ -10,7 +11,31 @@ function App() {
     data: signature,
     error: signError,
   } = useSignTypedData();
-  const [jsonInput, setJsonInput] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [jsonInput, setJsonInput] = useState(() => {
+    const jsonParam = searchParams.get("json");
+    if (jsonParam) {
+      try {
+        return JSON.stringify(JSON.parse(atob(jsonParam)), null, 2);
+      } catch (e) {
+        return "";
+      }
+    }
+    return "";
+  });
+
+  useEffect(() => {
+    if (jsonInput) {
+      try {
+        JSON.parse(jsonInput); // Validate JSON
+        setSearchParams({ json: btoa(jsonInput) });
+      } catch (e) {
+        // Don't update URL if JSON is invalid
+      }
+    } else {
+      setSearchParams({});
+    }
+  }, [jsonInput, setSearchParams]);
 
   const handleSign = async () => {
     try {
