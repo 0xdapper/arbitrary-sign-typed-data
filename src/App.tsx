@@ -1,5 +1,5 @@
 import { useAccount, useConnect, useDisconnect, useSignTypedData } from "wagmi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 
 function App() {
@@ -12,6 +12,7 @@ function App() {
     error: signError,
   } = useSignTypedData();
   const [searchParams, setSearchParams] = useSearchParams();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [jsonInput, setJsonInput] = useState(() => {
     const jsonParam = searchParams.get("json");
     if (jsonParam) {
@@ -36,6 +37,13 @@ function App() {
       setSearchParams({});
     }
   }, [jsonInput, setSearchParams]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [jsonInput]);
 
   const handleSign = async () => {
     try {
@@ -127,6 +135,7 @@ function App() {
       <div style={{ width: "100%" }}>
         <h2>Sign Typed Data</h2>
         <textarea
+          ref={textareaRef}
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}
           placeholder={`Paste your typed data JSON here, for example:
@@ -157,8 +166,10 @@ function App() {
 }`}
           style={{
             width: "100%",
-            height: "200px",
+            minHeight: "200px",
             marginBottom: "10px",
+            resize: "none",
+            overflow: "hidden",
           }}
         />
         {signError && (
