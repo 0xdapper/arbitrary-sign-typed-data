@@ -50,40 +50,81 @@ function App() {
   };
 
   return (
-    <>
-      <div>
-        <h2>Account</h2>
-        <div>
-          status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        padding: "20px",
+        gap: "20px",
+      }}
+    >
+      <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ flex: "1" }}>
+          <div>
+            <h2>Account</h2>
+            <div>
+              status: {account.status}
+              <br />
+              addresses: {JSON.stringify(account.addresses)}
+              <br />
+              chainId: {account.chainId}
+            </div>
+
+            {account.status === "connected" && (
+              <button type="button" onClick={() => disconnect()}>
+                Disconnect
+              </button>
+            )}
+          </div>
+
+          <div style={{ marginTop: "20px" }}>
+            <h2>Connect</h2>
+            {connectors.map((connector) => (
+              <button
+                key={connector.uid}
+                onClick={() => connect({ connector })}
+                type="button"
+              >
+                {connector.name}
+              </button>
+            ))}
+            <div>{status}</div>
+            <div>{error?.message}</div>
+          </div>
         </div>
 
-        {account.status === "connected" && (
-          <button type="button" onClick={() => disconnect()}>
-            Disconnect
-          </button>
-        )}
-      </div>
-
-      <div>
-        <h2>Connect</h2>
-        {connectors.map((connector) => (
-          <button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            type="button"
+        <div style={{ flex: "1" }}>
+          <div
+            style={{
+              padding: "20px",
+              backgroundColor: "#fff3cd",
+              color: "#856404",
+              border: "1px solid #ffeeba",
+              borderRadius: "4px",
+              fontSize: "1.1em",
+            }}
           >
-            {connector.name}
-          </button>
-        ))}
-        <div>{status}</div>
-        <div>{error?.message}</div>
+            <h3 style={{ color: "#856404", marginTop: 0 }}>⚠️ WARNING ⚠️</h3>
+            <p>
+              <strong>
+                ALWAYS carefully review the typed data before signing:
+              </strong>
+            </p>
+            <ul>
+              <li>Check all field types in the "types" section</li>
+              <li>Verify the message content thoroughly</li>
+              <li>Make sure you understand what you're signing</li>
+              <li>Never sign data from untrusted sources</li>
+            </ul>
+            <p>
+              Signing malicious typed data could compromise your wallet
+              security!
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div>
+      <div style={{ width: "100%" }}>
         <h2>Sign Typed Data</h2>
         <textarea
           value={jsonInput}
@@ -151,7 +192,7 @@ function App() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
